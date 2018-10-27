@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="./style.css">  
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container text-center">
+      <div class="heading">
+        <h1 class="title">PUZZLE</h1>
+      </div>
+
+      <div class="tile-container">
+
+      </div>
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function swapElements(a1, a2) {
+    var elm1 = a1.tile.get(0);
+    var elm2 = a2.tile.get(0);
+
+    var parent1, next1,
+        parent2, next2;
+
+    parent1 = elm1.parentNode;
+    next1   = elm1.nextSibling;
+    parent2 = elm2.parentNode;
+    next2   = elm2.nextSibling;
+
+    parent1.insertBefore(elm2, next1);
+    parent2.insertBefore(elm1, next2);
+
+    var tmp = a1.curX;
+    a1.curX = a2.curX;
+    a1.curX = tmp;
+    tmp = a1.curY;
+    a1.curY = a2.curY;
+    a2.curY = tmp;
+}
+
+/**
+ * Shuffles array in place.
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle(a, k) {
+  var len = a.length;
+  for (var y = 0; y < Math.min(k, len); y++) {
+    var i = Math.floor(Math.random() * len);
+    var j = Math.floor(Math.random() * len);
+    swapElements(a[i], a[j]);
+  }
+  return a;
+}
+
+$(function(){
+  var container = $(".tile-container");
+
+  var self = this;
+  self.firstTile = -1;
+  self.secondTile = -1;
+
+  self.rows = 5;
+  self.cols = 5;
+
+  var tiles = [];
+  for(var i=0; i<self.rows; ++i){
+    for(var j=0; j<self.cols; ++j){
+      var tile = $("<div></div>");
+      tile.addClass("tile");
+      var r = parseInt(i * 255 / self.rows);
+      var g = parseInt(j * 255 / self.cols);
+      var b = parseInt((i + j) * 255 / (self.rows + self.cols));
+      var color = rgbToHex(r, b, g);
+      tile.css('background-color', color);
+      tile.data('goalX', j);
+      tile.data('goalY', i);
+      var inner = $("<div></div>");
+      inner.addClass("inner");
+      inner.css('background-color', color);
+      tile.append(inner);
+      tiles.push({
+        curX: j,
+        curY: i,
+        tile: tile
+      });
+    }
+  }
+
+  for(var i=0; i<self.rows; ++i){
+    for(var j=0; j<self.cols; ++j){
+      container.append(tiles[i*self.rows + j].tile);
+    }
+    container.append("<br>");
+  }
+
+  shuffle(tiles, Math.floor(Math.random() * 2) + 1);
+
+  function isSolved(a, rows, cols){
+    try {
+      a.forEach(function(el, i){
+        var x = el.curX;
+        var y = el.curY;
+        var gx = $(el.tile).data('goalX');
+        var gy = $(el.tile).data('goalY');
+        if(x != gx || y != gy){
+          throw "failed";
+        }
+      });
+    } catch(e){
+      return false;
+    }
+    return true;
+  }
+
+  tiles.forEach(function(el, i){
+    $(el.tile).on("click", function(evt){
+      if(self.firstTile == -1){
+        self.firstTile = i;
+      } else if(self.secondTile == -1){
+        self.secondTile = i;
+
+        var a1 = tiles[self.firstTile], a2 = tiles[self.secondTile];
+        swapElements(a1, a2);
+
+        if(isSolved(tiles, self.rows, self.cols)){
+          alert('solve! ~_~');
+        }
+
+        self.firstTile = -1;
+        self.secondTile = -1;
+      }
+    });
+  });
+});
+    </script>
+  </body>
+</html>

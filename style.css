@@ -1,0 +1,24 @@
+.tile-container {
+    line-height: 0;
+}
+.tile {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background-color: #f9f9f9;
+}
+.tile>.inner{
+    display: none;
+}
+.tile:hover>.inner {
+    display: block;
+    cursor: pointer;
+    border: 2px solid rgba(0,0,0,.25);
+    position: absolute;
+    content: '';
+    width: 3rem;
+    height: 3rem;
+    margin-top: -0.5rem;
+    margin-left: -0.5rem;
+    z-index: 2;
+}

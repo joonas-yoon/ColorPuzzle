@@ -58,7 +58,7 @@
           <input type="range" min="3" max="30" value="10" class="slider" id="mapSize">
         </div>
 
-        <button class="btn btn-default start-button" style="display:none">START</button>
+        <button class="btn btn-default start-button">START</button>
       </div>
 
       <div class="grid-wrapper">
@@ -100,6 +100,15 @@ function componentToHex(c) {
 
 function rgbToHex(r, g, b) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }
 
 function swapElements(a1, a2) {
@@ -146,46 +155,47 @@ function Game(){
   self.firstTile = -1;
   self.secondTile = -1;
 
-  function setColor(container, color, body) {
-      body.css("background-color", color.tiny.toRgbString());
-      container.data('color', color);
-
-      if (color.cielch.l < 60) {
-          body.css("color", "white");
-      }
-      else {
-          body.css("color", "black");
-      }
+  function setColor(container, hex, body) {
+      body.css("background-color", hex);
+      container.data('hexcolor', hex);
   }
 
-  var colorSelect = [false, false, false, false];
+  var colorSamples = [
+    ["#177e89", "#084c61", "#db3a34", "#ffc857"],
+    ["#0e2f44", "#800000", "#bada55", "#ffa500"],
+    ["#ffffff", "#ffcad4", "#b0d0d3", "#c08497"],
+    ["#dc0073", "#f5b700", "#04e762", "#00a1e4"],
+    ["#0f5257", "#9c92a3", "#c6b9cd", "#d6d3f0"],
+    ["#1c77c3", "#40bcd8", "#f39237", "#d63230"],
+    ["#61210f", "#ea2b1f", "#edae49", "#f9edcc"]
+  ];
 
   [1, 2, 3, 4].forEach(function(i){
-    $("#color"+i).ColorPickerSliders({
-      color: 'white',
-      previewontriggerelement: false,
-      title: 'Color ' + i,
-      order: {
-          rgb: 1,
-          preview: 2
-      },
-      onchange: function(el, color){
-        colorSelect[i-1] = true;
-        setColor(el, color, $("#color"+i+"-preview"));
-
-        if(colorSelect[0] && colorSelect[1] && colorSelect[2] && colorSelect[3]){
-          $(".start-button").show();
+    $("#color"+i)
+      .ColorPickerSliders({
+        color: colorSamples[0][i-1],
+        previewontriggerelement: false,
+        title: 'Color ' + i,
+        order: {
+            rgb: 1,
+            preview: 2
+        },
+        onchange: function(el, color){
+          setColor(el, color.tiny.toHexString(), $("#color"+i+"-preview"));
         }
-      }
-    });
+      });
+      
+      setColor($("#color"+i), (new tinycolor(colorSamples[0][i-1])).toHexString(), $("#color"+i+"-preview"));
+    ;
   });
 
   function mergeColors(colors, weights){
     var r = 0, g = 0, b = 0;
     for(var i=0; i < weights.length; ++i){
-      r += colors[i].r * weights[i];
-      g += colors[i].g * weights[i];
-      b += colors[i].b * weights[i];
+      var rgb = hexToRgb(colors[i]);
+      r += rgb.r * weights[i];
+      g += rgb.g * weights[i];
+      b += rgb.b * weights[i];
     }
     return {
       r: Math.round(r),
@@ -205,10 +215,10 @@ function Game(){
 
     var tiles = [];
 
-    var color1 = $("#color1").data('color');
-    var color2 = $("#color2").data('color');
-    var color3 = $("#color3").data('color');
-    var color4 = $("#color4").data('color');
+    var color1 = $("#color1").data('hexcolor');
+    var color2 = $("#color2").data('hexcolor');
+    var color3 = $("#color3").data('hexcolor');
+    var color4 = $("#color4").data('hexcolor');
 
     for(var i=0; i<self.rows; ++i){
       for(var j=0; j<self.cols; ++j){
@@ -217,7 +227,7 @@ function Game(){
         var f3 = 1 - f1;
         var f4 = 1 - f2;
 
-        var colors = [color1.rgba, color2.rgba, color3.rgba, color4.rgba];
+        var colors = [color1, color2, color3, color4];
         var mergedColor = mergeColors(
           colors, [f1 * f2, f1 * f4, f2 * f3, f3 * f4]
         );

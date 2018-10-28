@@ -1,0 +1,3 @@
+[submodule "bootstrap-colorpickersliders"]
+	path = bootstrap-colorpickersliders
+	url = https://github.com/istvan-ujjmeszaros/bootstrap-colorpickersliders

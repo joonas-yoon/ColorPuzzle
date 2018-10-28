@@ -51,7 +51,7 @@
           <input type="range" min="1" max="100" value="10" class="slider" id="shufflePower">
         </div>
 
-        <button class="btn btn-default start-button">START</button>
+        <button class="btn btn-default start-button" style="display:none">START</button>
       </div>
 
       <div class="grid-wrapper">
@@ -151,6 +151,8 @@ function Game(){
       }
   }
 
+  var colorSelect = [false, false, false, false];
+
   [1, 2, 3, 4].forEach(function(i){
     $("#color"+i).ColorPickerSliders({
       color: 'white',
@@ -161,7 +163,12 @@ function Game(){
           preview: 2
       },
       onchange: function(el, color){
+        colorSelect[i-1] = true;
         setColor(el, color, $("#color"+i+"-preview"));
+
+        if(colorSelect[0] && colorSelect[1] && colorSelect[2] && colorSelect[3]){
+          $(".start-button").show();
+        }
       }
     });
   });

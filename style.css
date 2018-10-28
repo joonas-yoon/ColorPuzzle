@@ -2,6 +2,10 @@ html, body {
     background-color: #fafafa;
 }
 
+.logo-image {
+    display: none;
+}
+
 #overlay {
     position: fixed;
     display: none;

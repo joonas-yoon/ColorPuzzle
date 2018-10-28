@@ -3,8 +3,8 @@
 }
 .tile {
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    width: 3rem;
+    height: 3rem;
     background-color: #f9f9f9;
 }
 .tile>.inner{
@@ -16,9 +16,35 @@
     border: 2px solid rgba(0,0,0,.25);
     position: absolute;
     content: '';
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     margin-top: -0.5rem;
     margin-left: -0.5rem;
     z-index: 2;
+}
+
+.start-button {
+    margin: 1rem auto;
+}
+
+.color-swatch {
+    width: 60px;
+    height: 60px;
+    margin: 5px auto;
+    border-radius: 3px;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+@media (min-width: 768px)
+.color-swatch {
+    width: 100px;
+    height: 100px;
+}
+
+.color-picker-group {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.color-picker-group>button {
+    display: block;
 }

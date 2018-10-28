@@ -6,6 +6,7 @@
     width: 3rem;
     height: 3rem;
     background-color: #f9f9f9;
+    transition: transform 1s ease-in-out;
 }
 .tile>.inner{
     display: none;
@@ -21,6 +22,17 @@
     margin-top: -0.5rem;
     margin-left: -0.5rem;
     z-index: 2;
+}
+.tile.animate {
+    animation-name: scale-in;
+    animation-duration: 0.5s;
+}
+
+/* The animation code */
+@keyframes scale-in {
+    0%   {transform: scale(0.0);}
+    75%  {transform: scale(1.1);}
+    100% {transform: scale(1.0);}
 }
 
 .start-button {

@@ -198,8 +198,6 @@ function Game(){
     var color3 = $("#color3").data('color');
     var color4 = $("#color4").data('color');
 
-    console.log(color1, color2, color3, color4);
-
     for(var i=0; i<self.rows; ++i){
       for(var j=0; j<self.cols; ++j){
         var f1 = 1 - i / (self.rows - 1);
@@ -219,6 +217,7 @@ function Game(){
         tile.data('goalX', j);
         tile.data('goalY', i);
         tile.addClass("tile-"+i+"-"+j);
+        tile.addClass("animate");
         var inner = $("<div></div>");
         inner.addClass("inner");
         inner.css('background-color', color);

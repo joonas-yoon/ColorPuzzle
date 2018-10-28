@@ -93,6 +93,18 @@ html, body {
     display: block;
 }
 
+.color-palettes {
+    text-align: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin: 5px auto;
+}
+.color-palettes .btn {
+    display: inline-block;
+    margin-right: 5px;
+    border-radius: 50% !important;
+}
+
 .slider-wrapper {
     display: block;
     width: 100%;

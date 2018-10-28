@@ -27,6 +27,8 @@
         <h1 class="title">COLOR PUZZLE</h1>
       </div>
 
+      <div class="color-palettes" id="colorPalettes"></div>
+
       <div class="row">
         <div class="color-picker-group">
           <div class="color-swatch" id="color1-preview"></div>
@@ -162,13 +164,13 @@ function Game(){
   }
 
   var colorSamples = [
-    ["#177e89", "#084c61", "#db3a34", "#ffc857"],
-    ["#0e2f44", "#800000", "#bada55", "#ffa500"],
-    ["#ffffff", "#ffcad4", "#b0d0d3", "#c08497"],
-    ["#dc0073", "#f5b700", "#04e762", "#00a1e4"],
-    ["#0f5257", "#9c92a3", "#c6b9cd", "#d6d3f0"],
-    ["#1c77c3", "#40bcd8", "#f39237", "#d63230"],
-    ["#61210f", "#ea2b1f", "#edae49", "#f9edcc"]
+    {title: "Sample #1", colors: ["#177e89", "#084c61", "#db3a34", "#ffc857"]},
+    {title: "Sample #2", colors: ["#0e2f44", "#800000", "#bada55", "#ffa500"]},
+    {title: "Sample #3", colors: ["#ffffff", "#ffcad4", "#b0d0d3", "#c08497"]},
+    {title: "Sample #4", colors: ["#dc0073", "#f5b700", "#04e762", "#00a1e4"]},
+    {title: "Sample #5", colors: ["#0f5257", "#9c92a3", "#c6b9cd", "#d6d3f0"]},
+    {title: "Sample #6", colors: ["#1c77c3", "#40bcd8", "#f39237", "#d63230"]},
+    {title: "Sample #7", colors: ["#61210f", "#ea2b1f", "#edae49", "#f9edcc"]},
   ];
 
   [1, 2, 3, 4].forEach(function(i){
@@ -186,8 +188,24 @@ function Game(){
         }
       });
       
-      setColor($("#color"+i), (new tinycolor(colorSamples[0][i-1])).toHexString(), $("#color"+i+"-preview"));
+      setColor($("#color"+i), colorSamples[0].colors[i-1], $("#color"+i+"-preview"));
     ;
+  });
+
+  colorSamples.forEach(function(e, i){
+    var el = $("<button type=\"button\"></button>");
+    el.text(i+1);
+    el.attr('data-toggle', 'tooltip');
+    el.attr('title', e.title);
+    el.css('background-color', e.colors[0]);
+    el.addClass('btn');
+    el.on('click', function(evt){
+      e.colors.forEach(function(color, idx){
+        setColor($("#color"+(idx+1)), color, $("#color"+(idx+1)+"-preview"));
+      });
+    });
+    el.tooltip();
+    $("#colorPalettes").append(el);
   });
 
   function mergeColors(colors, weights){

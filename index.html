@@ -46,6 +46,11 @@
       </div>
 
       <div class="game-container">
+        <div class="slider-wrapper" style="max-width: 300px;">
+          <p>Difficulty</p>
+          <input type="range" min="1" max="100" value="10" class="slider" id="shufflePower">
+        </div>
+
         <button class="btn btn-default start-button">START</button>
       </div>
 
@@ -237,7 +242,8 @@ function Game(){
       container.append("<br>");
     }
 
-    shuffle(tiles, Math.floor(Math.random() * 2) + 1);
+    var shuffleLimit = (self.rows * self.cols) / 2 * $("#shufflePower").val() / 100;
+    shuffle(tiles, Math.floor(Math.max(1, shuffleLimit)));
 
     tiles.forEach(function(el, i){
       $(el.tile).on("click", function(evt){

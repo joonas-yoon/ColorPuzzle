@@ -54,9 +54,19 @@
         <button class="btn btn-default start-button">START</button>
       </div>
 
-      <div class="tile-container">
+      <div class="grid-wrapper">
+        <div class="tile-container"></div>
       </div>
 
+    </div>
+
+    <div id="overlay" onclick="overlayOff()">
+      <div class="body">
+        <center>
+          <p>SOLVED!</p>
+          <button class="btn btn-primary start-button">Play again?</button>
+        </center>
+      </div>
     </div>
 
     <!-- Optional JavaScript -->
@@ -68,6 +78,14 @@
     <script src="bootstrap-colorpickersliders/dist/bootstrap.colorpickersliders.min.js"></script>
 
     <script type="text/javascript">
+function overlayOn() {
+  document.getElementById("overlay").style.display = "block";
+}
+
+function overlayOff() {
+  document.getElementById("overlay").style.display = "none";
+}
+
 function componentToHex(c) {
   var hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
@@ -256,7 +274,7 @@ function Game(){
           swapElements(a1, a2);
 
           if(isSolved(tiles)){
-            alert('solve! ~_~');
+            overlayOn();
           }
 
           self.firstTile = -1;
